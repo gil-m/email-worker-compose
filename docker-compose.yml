@@ -1,7 +1,7 @@
 version: '3'
 
 volumes:
-    dados:
+    db_data:
 
 networks:
     db_net:
@@ -16,7 +16,7 @@ services:
             POSTGRES_HOST_AUTH_METHOD: "trust"
         volumes:
             # data volume
-            - dados:/var/lib/postgresql/data
+            - db_data:/var/lib/postgresql/data
             # scripts
             - ./scripts:/scripts
             - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql

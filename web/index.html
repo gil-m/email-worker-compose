@@ -4,33 +4,35 @@
 <head>
     <meta charset="utf-8">
     <title>E-mail sender</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
-        label {
-            display: block
-        }
-
-        textarea,
-        input {
-            width: 400px;
+        .vhcenter {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
         }
     </style>
 </head>
 
-<body class="container">
-    <h1>E-mail sender</h1>
-    <form action="http://localhost:8080/api" method="POST">
-        <div>
-            <label for="subject">Subject:</label>
-            <input type="text" name="subject">
-        </div>
-        <div>
-            <label for="message">Message:</label>
-            <textarea name="message" cols="50" rows="6"></textarea>
-        </div>
-        <div>
-            <button>Send!</button>
-        </div>
-    </form>
+<body class="text-center">
+    <div class="vhcenter">
+        <h1>E-mail sender</h1>
+        <form action="http://localhost:8080/api" method="POST">
+            <div class="form-group text-left">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" class="form-control" />
+            </div>
+            <div class="form-group text-left">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="3" class="form-control"></textarea>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-block btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>
