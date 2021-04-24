@@ -9,11 +9,11 @@ if __name__ == '__main__':
     redis_host = os.getenv('REDIS_HOST', 'queue')
 
     r = redis.Redis(host=redis_host, port=6379, db=0)
-    print('Aguardando mensagens...')
+    print('Waiting for messages...')
 
     while True:
-        mensagem = json.loads(r.blpop('sender')[1])
+        message = json.loads(r.blpop('sender')[1])
         # simulating email being sent
-        print('Mandando mensagem:', mensagem['assunto'])
-        sleep(randint(15, 45))
-        print('Mensagem', mensagem['assunto'], 'enviada')
+        print('Sending message:', message['subject'])
+        sleep(randint(3, 15))
+        print('Message', message['subject'], 'sent')

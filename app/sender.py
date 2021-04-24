@@ -12,35 +12,34 @@ class Sender(Bottle):
         self.route('/', method='POST', callback=self.send)
 
         redis_host = os.getenv('REDIS_HOST', 'queue')
-        self.fila = redis.StrictRedis(host=redis_host, port=6379, db=0)
+        self.queue = redis.StrictRedis(host=redis_host, port=6379, db=0)
 
         db_host = os.getenv('DB_HOST', 'db')
         db_user = os.getenv('DB_USER', 'postgres')
         db_name = os.getenv('DB_NAME', 'sender')
         dsn = f'dbname={db_name} user={db_user} host={db_host}'
-        
+
         self.conn = psycopg2.connect(dsn)
 
-    def register_message(self, assunto, mensagem):
-        sql = 'INSERT INTO emails (assunto, mensagem) values (%s, %s)'
+    def register_message(self, subject, message):
+        sql = 'INSERT INTO emails (subject, message) values (%s, %s)'
         cur = self.conn.cursor()
-        cur.execute(sql, (assunto, mensagem))
+        cur.execute(sql, (subject, message))
         self.conn.commit()
         cur.close()
 
-        msg = {'assunto': assunto, 'mensagem': mensagem}
-        self.fila.rpush('sender', json.dumps(msg))
+        msg = {'subject': subject, 'message': message}
+        self.queue.rpush('sender', json.dumps(msg))
 
-        print('Mensagem registrada!')
+        print('Message registered in db!')
 
     def send(self):
-        assunto = request.forms.get('assunto')
-        mensagem = request.forms.get('mensagem')
+        subject = request.forms.get('subject')
+        message = request.forms.get('message')
 
-        self.register_message(assunto, mensagem)
+        self.register_message(subject, message)
 
-        return 'Mensagem enfileirada! Assunto: {} Mensagem: {}'.format(assunto,
-                                                                       mensagem)
+        return 'Message queued! Subject: {} Message: {}'.format(subject, message)
 
 
 if __name__ == '__main__':
